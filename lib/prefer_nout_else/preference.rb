@@ -86,7 +86,7 @@ module PreferNoutElse
   class Preference < ActiveRecord::Base
     include PreferenceEngine
     serialize   :data, Hash
-    belongs_to  :preferencer, :polymorphic => true
+    belongs_to  :owner, :polymorphic => true
     
     after_initialize :init_data
     before_save :serialize_data

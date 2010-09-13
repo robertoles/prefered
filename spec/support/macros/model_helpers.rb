@@ -5,8 +5,8 @@ module RSpec
         ActiveRecord::Base.connection.create_table :dummies, :force => true do |table|
         end
         ActiveRecord::Base.connection.create_table :preferences, :force => true do |table|
-          table.column :preferencer_type, :string
-          table.column :preferencer_id,   :integer
+          table.column :owner_type, :string
+          table.column :owner_id,   :integer
           table.column :data,       :text
         end
         rebuild_class(&block)

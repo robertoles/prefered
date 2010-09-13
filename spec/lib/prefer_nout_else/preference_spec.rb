@@ -11,11 +11,11 @@ describe PreferNoutElse::Preference do
     end
   end
   
-  let(:preferencer) {Dummy.create}
-  let(:preference) {preferencer.preferences}
+  let(:owner) {Dummy.create}
+  let(:preference) {owner.preferences}
   subject {preference}
   
-  it {should belong_to(:preferencer)}
+  it {should belong_to(:owner)}
   it {should serialize(:data)}
   
   describe "#colour" do
@@ -43,7 +43,7 @@ describe PreferNoutElse::Preference do
       preference.sizes.height=400
       preference.save
     end
-    subject {Dummy.find(preferencer.id).preferences}
+    subject {Dummy.find(owner.id).preferences}
     
     its(:colour) {should == 'red'}
     it {subject.sizes.width.should == 200}

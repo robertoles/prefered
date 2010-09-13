@@ -9,10 +9,10 @@ module PreferNoutElse
   
   module ClassMethods
     def has_preferences(&block)
-      has_one :preferences, :class_name => "PreferNoutElse::Preference", :as => :preferencer, :autosave => true, :dependent => :destroy
+      has_one :preferences, :class_name => "PreferNoutElse::Preference", :as => :owner, :autosave => true, :dependent => :destroy
       alias_method :settings, :preferences
       after_initialize do
-        build_preferences(:preferencer => self) unless preferences
+        build_preferences(:owner => self) unless preferences
         # would prefer to pass block straight to preference model through delegation, however rails assoication_proxy later
         # breaks instance_eval for the block, and the block binding becomes broken, so we have to 'pass' the block through
         # this instance variable
