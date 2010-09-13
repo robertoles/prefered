@@ -1,7 +1,7 @@
 require 'rails/generators'
 require 'rails/generators/migration'    
 
-module PreferNoutElse
+module Prefered
   module Generators
     class PreferencesMigrationGenerator < Rails::Generators::Base
       include Rails::Generators::Migration

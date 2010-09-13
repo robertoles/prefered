@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe PreferNoutElse::Preference do
+describe Prefered::Preference do
   before do 
     rebuild_model do
       preference :colour, :default => 'yellow'

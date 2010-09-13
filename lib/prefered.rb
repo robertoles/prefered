@@ -1,6 +1,6 @@
-require 'prefer_nout_else/preference'
+require 'prefered/preference'
 
-module PreferNoutElse
+module Prefered
   class << self
     def included base
       base.extend ClassMethods
@@ -9,7 +9,7 @@ module PreferNoutElse
   
   module ClassMethods
     def has_preferences(&block)
-      has_one :preferences, :class_name => "PreferNoutElse::Preference", :as => :owner, :autosave => true, :dependent => :destroy
+      has_one :preferences, :class_name => "Prefered::Preference", :as => :owner, :autosave => true, :dependent => :destroy
       alias_method :settings, :preferences
       after_initialize do
         build_preferences(:owner => self) unless preferences
@@ -25,5 +25,5 @@ module PreferNoutElse
 end
 
 if Object.const_defined?("ActiveRecord")
-  ActiveRecord::Base.send(:include, PreferNoutElse)
+  ActiveRecord::Base.send(:include, Prefered)
 end

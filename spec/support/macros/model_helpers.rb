@@ -1,5 +1,5 @@
 module RSpec
-  module PreferNoutElse
+  module Prefered
     module ModelHelpers
       def rebuild_model(&block)
         ActiveRecord::Base.connection.create_table :dummies, :force => true do |table|
@@ -13,11 +13,11 @@ module RSpec
       end
 
       def rebuild_class(&block)
-        ActiveRecord::Base.send(:include, PreferNoutElse)
+        ActiveRecord::Base.send(:include, Prefered)
         Object.send(:remove_const, "Dummy") rescue nil
         Object.const_set("Dummy", Class.new(ActiveRecord::Base))
         Dummy.class_eval do
-          include PreferNoutElse
+          include Prefered
           has_preferences &block
         end
       end

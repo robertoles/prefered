@@ -6,7 +6,7 @@ class Array
   end
 end
 
-module PreferNoutElse
+module Prefered
   class PreferenceSettings
     class << self
       def evaluate(&block)
@@ -92,7 +92,7 @@ module PreferNoutElse
     before_save :serialize_data
     
     def init_preferences
-      settings = interpret_settings(&@preference_settings_block) # hack, see prefer_nout_else.rb
+      settings = interpret_settings(&@preference_settings_block) # hack, see prefered.rb
       init_methods(settings)
       deserialize_data(settings)
     end
