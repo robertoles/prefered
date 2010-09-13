@@ -1,60 +1,63 @@
-= S3asy
+= Prefered
 
-Rails gem for associating an s3 object with an active record model
+Prefered allows you to add preferences / settings to any model that extends ActiveRecord::Base in a Rails 3 project
 
-== Install
+== Installation
 
-  gem install robertoles-s3asy --source http://gemcutter.org
+=== Gem
 
-== Config
+You can let bundler to install Prefered by adding this line to your application's Gemfile:
 
-Create a file /config/amazon_s3.yml in your rails application, with the following contents...
+  gem 'prefered'
 
-  test:
-    access_key_id: your_access_key_id
-    secret_access_key: your_secret_access_key
-    bucket: your_default_bucket
+And then execute:
+
+  bundle install 
+
+Or install it yourself as:
+
+  gem install prefered
   
-== Associate s3 object to active record usage
+=== DB
 
-You want to create an active record model 'product' which has an attribute 'image' which is an s3 object. First create a migration for your model and specify a string column for the image attribute followed by _name... 
+Next you will need to run the generator which will create the db migration for you:
 
-  class CreateProducts < ActiveRecord::Migration
-    def self.up
-      create_table :products do |t|
-        t.string :image_name
+  rails g prefered:preferences_migration
+  
+Then migrate your db:
 
-        t.timestamps
+  rake db:migrate
+  
+== Usage
+
+Now your all installed you can add preferences to your active record model, for instance for a User model:
+
+  class User < ActiveRecord::Base
+    has_preferences do
+      preference :colour, :default => 'green'
+      group :email
+        preference :html, :default => false
       end
     end
-
-    def self.down
-      drop_table :products
-    end
   end
-    
-    
-Finally create the association in your model, specifying the bucket on s3 the object is stored in...
-
-  class Product < ActiveRecord::Base
-    has_s3object :image
-  end
-
-The has_s3object method will accept the follow options as a hash...
-
-  :bucket => 'bucket_name' # will look for the object in this bucket instead of the default.
-
-
-== Search s3 objects in a bucket
   
-You can search objects in an s3 bucket using the search function on the S3ObjectProxy class...
+This would add the following to your user model:
 
-  S3ObjectProxy.search('prefix_to_search_by')
-  # => [<AWS::S3::S3Object]
+  user.preferences.colour #=> 'green'
+  user.preferences.email.html #=> false
 
-This function takes an options parameter hash where you can provide a bucket to search in (which overrides the default set in the config file)
+To change preferences you simply use a setter for each preference:
 
-  :bucket => 'not_the_default_bucket'
+  user.preferences.colour= 'yellow'
+  user.preferences.email.html= false
+  
+And to persist them just save the user model:
+
+  user.save
+  
+== Thanks
+
+  Thanks to anyone who gives this a try, peace & love, Rob :)
 
 == License
 
