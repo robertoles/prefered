@@ -1,0 +1,80 @@
+= S3asy
+
+Rails gem for associating an s3 object with an active record model
+
+== Install
+
+  gem install robertoles-s3asy --source http://gemcutter.org
+
+== Config
+
+Create a file /config/amazon_s3.yml in your rails application, with the following contents...
+
+  test:
+    access_key_id: your_access_key_id
+    secret_access_key: your_secret_access_key
+    bucket: your_default_bucket
+  
+== Associate s3 object to active record usage
+
+You want to create an active record model 'product' which has an attribute 'image' which is an s3 object. First create a migration for your model and specify a string column for the image attribute followed by _name... 
+
+  class CreateProducts < ActiveRecord::Migration
+    def self.up
+      create_table :products do |t|
+        t.string :image_name
+
+        t.timestamps
+      end
+    end
+
+    def self.down
+      drop_table :products
+    end
+  end
+    
+    
+Finally create the association in your model, specifying the bucket on s3 the object is stored in...
+
+  class Product < ActiveRecord::Base
+    has_s3object :image
+  end
+
+The has_s3object method will accept the follow options as a hash...
+
+  :bucket => 'bucket_name' # will look for the object in this bucket instead of the default.
+
+
+== Search s3 objects in a bucket
+  
+You can search objects in an s3 bucket using the search function on the S3ObjectProxy class...
+
+  S3ObjectProxy.search('prefix_to_search_by')
+  # => [<AWS::S3::S3Object]
+
+This function takes an options parameter hash where you can provide a bucket to search in (which overrides the default set in the config file)
+
+  :bucket => 'not_the_default_bucket'
+
+== License
+
+Copyright (c) 2010 Robert Oles
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
